@@ -22,6 +22,9 @@ public class ProteinFoldAlg {
 	{
 		System.out.println("\n- ALGORITHM BEGIN -\n");
 		
+		Graphics graph = new Graphics();
+		graph.main(null);
+		
 		//ExampleString
 		String SEQ20 = "10100110100101100101";
 		
@@ -37,7 +40,7 @@ public class ProteinFoldAlg {
 		}
 		
 		char[][] Grid = new char[size][size];
-		////////////////////
+		
 		for (int i = 0; i < size; i ++)
 		{
 			for (int y = 0; y < size; y ++)
