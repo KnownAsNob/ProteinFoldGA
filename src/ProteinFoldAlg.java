@@ -37,7 +37,7 @@ public class ProteinFoldAlg {
 		}
 		
 		char[][] Grid = new char[size][size];
-		
+		////////////////////
 		for (int i = 0; i < size; i ++)
 		{
 			for (int y = 0; y < size; y ++)
