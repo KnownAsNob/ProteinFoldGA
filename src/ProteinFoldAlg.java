@@ -16,17 +16,6 @@ DEV:
 import java.util.ArrayList;
 import java.util.Random;
 
-// Import for image processing
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
 public class ProteinFoldAlg {
 	
 	public static void main (String args[])
@@ -37,7 +26,7 @@ public class ProteinFoldAlg {
 		String SEQ20 = "10100110100101100101";
 		
 		//Setup array list
-		ArrayList<Character> Elements = new ArrayList<Character>();
+		ArrayList<AminoObject> Elements = new ArrayList<AminoObject>();
 		
 		//Setup 2D grid
 		int size = SEQ20.length();
@@ -60,19 +49,20 @@ public class ProteinFoldAlg {
 		//Add chars to Elements
 		for (int i = 0; i < SEQ20.length(); ++ i)
 		{
-			System.out.println("Adding to Elements list: " + SEQ20.charAt(i));
-			Elements.add(i, SEQ20.charAt(i));
+			AminoObject graphObject = new AminoObject(i, SEQ20.charAt(i), 0, 0); //Create object
+			Elements.add(i, graphObject); //Add object to list
+			System.out.println("Adding object to Elements list with value: " + graphObject.aminoValue);
 		}
 		
 		//Print Elements
 		System.out.println("Contents of Elements: " + Elements);
 		
-		//Writing and folding protein 
+		//Start in middle of graph
 		int height = size/2;
 		int width = size/2;
 		
 		//Start in middle
-		Grid[height][width] = Elements.get(0);
+		Grid[height][width] = Elements.get(0).aminoValue;
 		
 		//Set protein position
 		int hPos = height;
@@ -108,7 +98,7 @@ public class ProteinFoldAlg {
 			{
 				prevHPos = hPos;
 				hPos = hPos + 1;
-				Grid[hPos][wPos] = Elements.get(i);
+				Grid[hPos][wPos] = Elements.get(i).aminoValue;
 				System.out.println("DOWN: " + Grid[hPos][wPos]);
 			}
 			
@@ -116,7 +106,7 @@ public class ProteinFoldAlg {
 			{
 				prevHPos = hPos;
 				hPos = hPos - 1;
-				Grid[hPos][wPos] = Elements.get(i);
+				Grid[hPos][wPos] = Elements.get(i).aminoValue;
 				System.out.println("UP: " + Grid[hPos][wPos]);
 			}
 			
@@ -124,7 +114,7 @@ public class ProteinFoldAlg {
 			{
 				prevWPos = wPos;
 				wPos = wPos - 1;
-				Grid[hPos][wPos] = Elements.get(i);
+				Grid[hPos][wPos] = Elements.get(i).aminoValue;
 				System.out.println("LEFT: " + Grid[hPos][wPos]);
 			}
 			
@@ -132,11 +122,13 @@ public class ProteinFoldAlg {
 			{
 				prevWPos = wPos;
 				wPos = wPos + 1;
-				Grid[hPos][wPos] = Elements.get(i);
+				Grid[hPos][wPos] = Elements.get(i).aminoValue;
 				System.out.println("RIGHT: " + Grid[hPos][wPos]);
 			}
 			
-			System.out.println("Position: " + hPos + " " + wPos);
+			Elements.get(i).posX = wPos;
+			Elements.get(i).posY = hPos;
+			System.out.println("Position is: X = " + Elements.get(i).posX + " and Y = " + Elements.get(i).posY);
 			System.out.println("Previous Position: " + prevHPos + " " + prevWPos + "\n");
 			
 			if (Grid[hPos][wPos] == '1')
@@ -148,9 +140,14 @@ public class ProteinFoldAlg {
 				System.out.println("New fitness is: " + fitness + "\n");
 			}
 		}
-		drawBack();
+		
 		System.out.println("- ALGORITHM COMPLETE -");
-	}
+		
+		//Draw image
+		Graphics drawGraph = new Graphics();
+		drawGraph.drawObject(Elements);
+		
+	} //END MAIN
 	
 	//Decide direction and calculate value
 	public static int fold()
@@ -191,61 +188,6 @@ public class ProteinFoldAlg {
 		}
 		
 		return fit;
-		
-	}
-	
-	public static void drawBack()
-	{
-		int height = 500;
-		int width = 800;
-		
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2 = image.createGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		
-		g2.setColor(Color.YELLOW);
-		g2.fillRect(0, 0, width, height);
-
-		int cellSize = 80;
-		
-		g2.setColor(new Color(0, 200, 0));
-		g2.fillRect(50, 50, cellSize, cellSize);		
-
-		g2.setColor(new Color(255, 0, 0));
-		g2.fillRect(250, 50, cellSize, cellSize);
-		
-		g2.setColor(Color.BLACK);
-		g2.drawLine(50 + cellSize, 50+cellSize/2, 250, 50+cellSize/2);
-		
-		g2.setColor(new Color(255, 255, 255));
-		String label = "GA";
-		Font font = new Font("Serif", Font.PLAIN, 40);
-		g2.setFont(font);
-		FontMetrics metrics = g2.getFontMetrics();
-		int ascent = metrics.getAscent();
-		int labelWidth = metrics.stringWidth(label);
-
-		g2.drawString(label, 50 + cellSize/2 - labelWidth/2 , 50 + cellSize/2 + ascent/2);
-		
-		
-		String folder = "/tmp/alex/ga";
-		String filename = "ProteinPicture.png";
-		if (new File(folder).exists() == false) new File(folder).mkdirs();
-		
-		try 
-		{
-			ImageIO.write(image, "png", new File(filename));
-		} 
-		
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-			System.exit(0);
-		}
-	}
-
-	public static void drawItem()
-	{
 		
 	}
 }

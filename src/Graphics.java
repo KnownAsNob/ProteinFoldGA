@@ -9,9 +9,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import java.util.List;
+
 public class Graphics 
 {
-	public static void main(String[] args) 
+	public void drawObject(List<AminoObject> Elements)
 	{
 		//Draw background
 		int height = 500;
@@ -24,10 +26,19 @@ public class Graphics
 		g2.setColor(Color.YELLOW);
 		g2.fillRect(0, 0, width, height);
 
-		int cellSize = 80;
+		int cellSize = 50;
+		int increase = 60;
 		
-		g2.setColor(new Color(0, 200, 0));
-		g2.fillRect(50, 50, cellSize, cellSize);		
+		for (int i = 0; i < Elements.size(); i ++)
+		{
+			g2.setColor(new Color(0, 200, 0));
+			g2.fillRect(Elements.get(i).posX * 10, Elements.get(i).posY * 10, cellSize, cellSize);
+			
+			increase = increase + increase;
+		}
+		
+		/*g2.setColor(new Color(0, 200, 0));
+		g2.fillRect(50, 50, cellSize, cellSize);
 
 		g2.setColor(new Color(255, 0, 0));
 		g2.fillRect(250, 50, cellSize, cellSize);
@@ -43,7 +54,7 @@ public class Graphics
 		int ascent = metrics.getAscent();
 		int labelWidth = metrics.stringWidth(label);
 
-		g2.drawString(label, 50 + cellSize/2 - labelWidth/2 , 50 + cellSize/2 + ascent/2);
+		g2.drawString(label, 50 + cellSize/2 - labelWidth/2 , 50 + cellSize/2 + ascent/2);*/
 		
 		
 		String folder = "/tmp/alex/ga";
