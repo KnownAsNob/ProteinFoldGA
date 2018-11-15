@@ -11,9 +11,9 @@ import javax.imageio.ImageIO;
 
 public class Graphics 
 {
-	
 	public static void main(String[] args) 
 	{
+		//Draw background
 		int height = 500;
 		int width = 800;
 		
@@ -45,6 +45,7 @@ public class Graphics
 
 		g2.drawString(label, 50 + cellSize/2 - labelWidth/2 , 50 + cellSize/2 + ascent/2);
 		
+		
 		String folder = "/tmp/alex/ga";
 		String filename = "ProteinPicture.png";
 		if (new File(folder).exists() == false) new File(folder).mkdirs();
@@ -59,5 +60,10 @@ public class Graphics
 			e.printStackTrace();
 			System.exit(0);
 		}
+	}
+	
+	public static void drawAcidElement()
+	{
+		
 	}
 }
